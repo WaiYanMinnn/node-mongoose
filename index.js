@@ -12,9 +12,22 @@ connect.then (()=>{
     })
     .then((campsite)=>{
         console.log(campsite);
-        return Campsite.find();
-    }).then ((campsites)=>{
-        console.log(campsites);
+        return Campsite.findByIdAndUpdate(campsite._id,{
+            $set:{description:'Updated Test Document'}
+        },{
+            new:true
+        });
+    }).then((campsite)=>{
+        console.log(campsite);
+        campsite.comments.push({
+            rating:5,
+            text:'What a magnificent view!',
+            author: 'Tinus Lorvaldes'
+        });
+        return campsite.save();
+    })
+    .then ((campsite)=>{
+        console.log(campsite);
         return Campsite.deleteMany();
     }).then (()=>{
         return mongoose.connection.close();
